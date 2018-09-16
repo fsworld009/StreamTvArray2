@@ -1,0 +1,9 @@
+node_modules
+src/semantic/
+dist/
+semantic/*.*
+semantic/tasks
+semantic/src/definitions/
+semantic/src/themes/
+semantic/src/semantic.less
+semantic/src/theme.less
