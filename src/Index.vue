@@ -1,26 +1,26 @@
 <template lang="pug">
-div
+div#app
   span.hello
     | Hello World {{ test }}
     i.ui.large.icon.github
   div.text.blue
     | Semantic test
+  OptionsWindow
 
 </template>
 
 <style lang="less">
-@text-color: white;
 
-.hello {
-  color: @text-color;
-}
 
 </style>
 
 
 <script>
+import OptionsWindow from 'components/OptionsWindow';
+
 export default {
   components: {
+    OptionsWindow,
   },
   data() {
     return {

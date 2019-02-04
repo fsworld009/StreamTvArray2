@@ -1,11 +1,10 @@
 import Vue from 'vue';
-import Index from './Index.vue';
-// import store from './store.js';
-// import VueLang from './plugins/vue-lang.js';
 
-require('./semantic/semantic.css');
-require('./semantic/semantic.js');
-require('./index.less');
+import './semantic/semantic.css';
+import './semantic/semantic.js';
+import './index.less';
+
+import Index from './Index.vue';
 
 window.onbeforeunload = function _beforeload() { return ''; };
 
