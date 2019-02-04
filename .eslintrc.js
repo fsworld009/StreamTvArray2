@@ -1,15 +1,18 @@
 module.exports = {
+  root: true,
   parserOptions: {
-    ecmaVersion: 6,
+    parser: 'babel-eslint',
     sourceType: 'module',
-    ecmaFeatures: {
-    },
   },
   env: {
     browser: true,
+    jest: true,
   },
   extends: ['airbnb-base', 'plugin:vue/essential'],
   rules: {
     'max-len': ['error', { code: 80 }],
+    'import/no-unresolved': 'off',
+    'import/extensions': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };
