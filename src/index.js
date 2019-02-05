@@ -26,4 +26,4 @@ const app = new Vue({
 
 window.vm = app;
 
-// VueLang.setAppRoot(app);
+VueLang.setAppRoot(app);

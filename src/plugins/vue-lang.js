@@ -1,123 +1,127 @@
-
 /* eslint-disable */
 
-const VueLang = {
 
-  _$lang() {
-    const $lang = function (messageId, substitutions) {
-      /* eslint-disable-next-line */
-      messageId = String(messageId);
-      const messageMap = this.messageMap || this.$root.$lang.messageMap;
-      if (!messageMap) {
-        return '';
-      }
+// var messageMap = {};
+// var langCode = "en";
 
-      const langCode = this.langCode || this.$root.$lang.langCode;
+var VueLang = {
+  __messageMap: {},
+  __langCode: "en",
+  __defaultLangCode: "en",
 
-      const messages = messageMap[langCode];
-      if (!messages) {
-        return '';
-      }
-      let returnMsg = '';
-
-      if (messages[messageId]) {
-        returnMsg = messages[messageId];
-      } else {
-        returnMsg = '';
-      }
-
-      returnMsg = String(returnMsg);
-
-      if (substitutions) {
-        returnMsg = returnMsg.replace(/\{([A-Za-z0-9]+)\}/g, (match, $1) => {
-          if (typeof substitutions[$1] !== 'undefined') {
-            return substitutions[$1];
+  __$lang: function(){
+      var $lang = function(messageId, substitutions){
+          messageId = String(messageId);
+          var messages = VueLang.__messageMap[VueLang.__langCode];
+          if(!messages){
+              return "";
           }
-          return match;
-        });
+          var returnMsg="";
+
+          if(messages[messageId]){
+              returnMsg = messages[messageId];
+          }else{
+              var messageIdPath = messageId.split(".");
+              returnMsg = messageIdPath.reduce(function(messageMap, nextMsgId){
+                  if(typeof messageMap == "object"){
+                      return messageMap[nextMsgId];
+                  }else{
+                      return messageMap;
+                  }
+              }, messages);
+          }
+
+          returnMsg = String(returnMsg);
+
+          if(substitutions){
+              returnMsg = returnMsg.replace(/\{([A-Za-z0-9]+)\}/g, function(match, $1){
+                  if(substitutions[$1]){
+                      return substitutions[$1];
+                  }else{
+                      return match;
+                  }
+              });
+          }
+
+          return returnMsg;
+      };
+
+      $lang.langCode = function(){
+          return VueLang.__langCode;
+      };
+
+      return $lang;
+  },
+
+  processMessages: function(returnMsgObj, currentMsgObj, prefixes){
+      var keys = Object.keys(currentMsgObj);
+      var msgPrefix = prefixes.join(".");
+      for(var i=0;i<keys.length;i++){
+          var key = keys[i];
+          var message = currentMsgObj[key];
+          if(typeof message == "object"){
+              prefixes.push(key);
+              VueLang.processMessages(returnMsgObj, message, prefixes);
+              prefixes.pop();
+          }else{
+              returnMsgObj[msgPrefix + "." + key] = message;
+          }
+      }
+  },
+
+  install: function(Vue, options){
+      options = options || {};
+      if(options.messages){
+          VueLang.__messageMap = Object.assign({}, options.messages);
       }
 
-      return returnMsg;
-    };
-
-    $lang.changeLangCode = function (langCode) {
-      this.langCode = langCode;
-      this._$forceUpdate();
-    };
-
-    const processMessages = function(returnMsgObj, currentMsgObj, prefixes) {
-      const keys = Object.keys(currentMsgObj);
-      const msgPrefix = prefixes.join('.');
-      for (let i = 0; i < keys.length; i += 1) {
-        const key = keys[i];
-        const message = currentMsgObj[key];
-        if (typeof message === 'object') {
-          prefixes.push(key);
-          processMessages(returnMsgObj, message, prefixes);
-          prefixes.pop();
-        } else {
-          returnMsgObj[`${msgPrefix}.${key}`] = message;
-        }
+      if(options.langCode){
+          VueLang.__langCode = options.langCode;
       }
-    };
 
-    $lang.updateMessageMap = function(langCode, messageMap) {
-      const returnMsg = {};
-      processMessages(returnMsg, messageMap, []);
-      this.messageMap[langCode] = Object.assign(
-        {}, this.messageMap[this.defaultLangCode], returnMsg,
-      );
-    };
+      if(options.default){
+          VueLang.__defaultLangCode = options.default;
+      }
 
-    $lang._$forceUpdate = function() {
-      // https://github.com/kvdmolen/vue-lang/blob/master/index.js
-      const vm = this.$root;
-      let i;
-      for (i = 0; i < vm._watchers.length; i += 1) {
-        vm._watchers[i].update();
+      Vue.prototype.$lang = VueLang.__$lang();
+
+
+      Vue.$lang = {
+          changeLangCode: function(newLangCode){
+              VueLang.__langCode = newLangCode;
+              VueLang.__$forceUpdate(VueLang.__$root);
+          },
+
+          update: function(langCode, messages){
+              var returnMsg = {};
+              VueLang.processMessages(returnMsg, messages, []);
+              VueLang.__messageMap[langCode] = Object.assign({}, VueLang.__messageMap[VueLang.__defaultLangCode], returnMsg);
+          },
+
+          loaded: function(langCode){
+              return VueLang.__messageMap[langCode]? true: false;
+          }
+      };
+
+  },
+
+  __$forceUpdate: function(vm){
+      //https://github.com/kvdmolen/vue-lang/blob/master/index.js
+      var i;
+      for(i=0; i< vm._watchers.length; i++){
+          vm._watchers[i].update();
       }
       vm.$forceUpdate();
-      for (i = 0; i < vm._watchers.length; i += 1) {
-        this._$forceUpdate(vm.$children[i]);
+      for(i=0; i< vm.$children.length; i++){
+          this.__$forceUpdate(vm.$children[i]);
       }
-    };
-
-    $lang.loaded = function(langCode) {
-      return typeof this.messageMap[langCode] !== 'undefined';
-    }
-
-    return $lang;
   },
 
-  install(Vue) {
-    Vue.prototype.$lang = VueLang._$lang();
+  __$root: undefined,
 
-    Vue.mixin({
-      beforeCreate() {
-        const options = this.$options;
-        if (options.lang) {
-          const langOptions = Object.assign({
-            messageMap: {},
-            defaultLangCode: 'en',
-          }, options.lang);
-          Object.assign(this.$lang, {
-            langCode: langOptions.defaultLangCode,
-            messageMap: langOptions.messageMap,
-          });
-
-          const { defaultLangCode } = langOptions;
-          if (!this.$lang.messageMap[defaultLangCode]) {
-            this.$lang.messageMap[defaultLangCode] = {};
-          }
-        }
-      },
-      mounted() {
-        this.$lang.$root = this.$root;
-      },
-    });
-
-  },
-
+  setAppRoot: function($root){
+      this.__$root = $root;
+  }
 };
 
 export default VueLang;

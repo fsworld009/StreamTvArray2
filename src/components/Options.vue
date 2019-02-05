@@ -1,14 +1,15 @@
 <template lang="pug">
-  Modal.options(:options="modalOptions", :show="modalShow")
+  Modal.options(ref="modal", :options="modalOptions", :show="modalShow")
     div.two.column.ui.grid.container
       div.row
         div.column
           | Language
         div.column
-          Dropdown(name="langCode", value="en", :items="langCodes")
+          Dropdown(name="langCode", :value="$lang.langCode()",
+                   :items="langCodes", @change="onChangeLangCode")
       div.row
         div.column
-          | Option a
+          | {{ $lang('arrayOptions.arraySize') }}
         div.column
           SeForm
             div.fields
@@ -16,8 +17,6 @@
               div.one.wide.field
                 div(style="position:relative;top:35%;") x
               SeInput.four.wide.field(size="4")
-
-
 
 </template>
 
@@ -56,11 +55,26 @@ export default {
           {},
         ],
       },
-      modalShow: true,
+      modalShow: false,
       langCodes,
     };
   },
   methods: {
+    onChangeLangCode(value, text, $choice) {
+      this.$emit('langChangeStart');
+      this.modalShow = false;
+      this.$store.dispatch({
+        type: 'loadLanguage',
+        langCode: value,
+      }).then(() => {
+        this.$store.commit({
+          type: 'changeLangCode',
+          langCode: value,
+        });
+        this.modalShow = true;
+        this.$emit('langChangeDone');
+      });
+    },
   },
 };
 

@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build-semantic": "cd ./semantic; gulp build",
-    "dev-server": "webpack-dev-server --color --progress --config ./config/webpack.dev.config.js",
+    "dev-server": "npm run copy-lang; NODE_ENV=development webpack-dev-server --color --progress --config ./config/webpack.dev.config.js",
     "dev-build": "rm -rf dist/dev; webpack --config ./config/webpack.dev.config.js",
     "install-semantic": "./script/remove_semantic_assets.sh; cd node_modules/semantic-ui/; npm run install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "copy-lang": "rm -rf dist/dev/languages; cp -r ./src/languages ./dist/dev"
   },
   "author": "fsworld009",
   "license": "MIT",
