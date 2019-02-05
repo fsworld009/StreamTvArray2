@@ -81,10 +81,10 @@ function getConfig(options = {}) {
           test: /\.less$/,
           loader: styleLoaders.concat(['less-loader']),
         },
-        {
-          test: /\.json$/,
-          loader: 'json-loader',
-        },
+        // {
+        //   test: /\.json$/,
+        //   loader: 'json-loader',
+        // },
         {
           test: /\.(png|jpe?g|gif)(\?.*)?$/,
           loader: 'url-loader',

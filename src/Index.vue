@@ -5,7 +5,7 @@ div#app
     i.ui.large.icon.github
   div.text.blue
     | Semantic test
-  OptionsWindow
+  Options
 
 </template>
 
@@ -16,11 +16,11 @@ div#app
 
 
 <script>
-import OptionsWindow from 'components/OptionsWindow';
+import Options from 'components/Options';
 
 export default {
   components: {
-    OptionsWindow,
+    Options,
   },
   data() {
     return {
