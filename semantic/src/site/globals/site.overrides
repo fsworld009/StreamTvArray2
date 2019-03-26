@@ -68,15 +68,3 @@
     display: none !important;
   }
 }
-
-
-
-// https://github.com/Semantic-Org/Semantic-UI/issues/1885#issuecomment-226047499
-@text-colors: blue, green, orange, pink, purple, red, teal, yellow, black, grey, white, olive, violet, brown;
-.text {
-    .-(@i: length(@text-colors)) when (@i > 0) {
-        @c: extract(@text-colors, @i);
-        &.@{c} { color: @@c !important}
-        .-((@i - 1));
-    }.-;
-}

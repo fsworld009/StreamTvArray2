@@ -6,8 +6,11 @@ div#app
     span.hello
       | Hello World {{ test }}
       i.ui.large.icon.github
-    div.text.blue
-      | Semantic test
+    div
+      span.ui.primary.text Semantic test
+    div
+      a(href="#") test link color
+    button.ui.red.button
   Options(ref="options", @langChangeStart="onLangChangeStart",
           @langChangeDone="onLangChangeDone")
 
@@ -21,7 +24,7 @@ div#app
 
 <script>
 import Options from 'components/Options';
-import {mapState} from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   components: {

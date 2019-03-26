@@ -15,9 +15,9 @@
     },
     "clean": "../src/semantic/"
   },
-  "components": ["reset", "site", "button", "divider", "dimmer", "header", "icon", "input", "label", "segment", "form", "menu", "grid", "checkbox", "dropdown", "modal", "transition"],
+  "components": ["reset", "site", "text", "button", "divider", "dimmer", "header", "icon", "input", "label", "segment", "form", "menu", "grid", "checkbox", "dropdown", "modal", "transition"],
   "permission": false,
   "autoInstall": false,
   "rtl": false,
-  "version": "2.4.2"
+  "version": "2.7.2"
 }

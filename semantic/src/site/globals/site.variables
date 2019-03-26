@@ -28,3 +28,53 @@
 @lightRed         : #EF9A9A;
 @lightTeal        : #80CBC4;
 @lightYellow      : #FFF59D;
+
+/* Temp: copied from material theme from now, just recording available variables */
+
+/*---   Neutrals  ---*/
+@fullBlack        : #000000;
+@darkGrey         : #AAAAAA;
+@lightGrey        : #DCDDDE;
+@offWhite         : #FAFAFA;
+@darkWhite        : #F0F0F0;
+@white            : #FFFFFF;
+
+/*-------------------
+    Brand Colors
+--------------------*/
+
+@primaryColor        : @blue;
+@secondaryColor      : @grey;
+
+@lightPrimaryColor   : @lightBlue;
+@lightSecondaryColor : @lightGrey;
+
+/*-------------------
+      Paragraph
+--------------------*/
+
+@paragraphMargin     : 0em 0em 1.53em;
+
+/*-------------------
+       Links
+--------------------*/
+
+@linkColor           : #009FDA;
+@linkUnderline       : none;
+@linkHoverColor      : lighten(@linkColor, 5);
+@linkHoverUnderline  : @linkUnderline;
+
+/*-------------------
+  Highlighted Text
+--------------------*/
+
+@highlightBackground : #009FDA;
+@highlightColor      : @white;
+
+/*-------------------
+       Accents
+--------------------*/
+
+/* 4px @ default em */
+@relativeBorderRadius: @relative4px;
+@absoluteBorderRadius: 4px;
